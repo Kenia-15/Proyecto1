@@ -1,0 +1,108 @@
+﻿@model aplicacion_proyecto1.Models.TblUsuario
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TblUsuario</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!--<div class="form-group">
+                <label asp-for="IdUsuario" class="control-label"></label>
+                <input asp-for="IdUsuario" class="form-control" />
+                <span asp-validation-for="IdUsuario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPersona" class="control-label"></label>
+                <select asp-for="IdPersona" class ="form-control" asp-items="ViewBag.IdPersona"></select>
+            </div> -->
+            <div class="form-group">
+                <label asp-for="IdPersonaNavigation.NumeroIdentificacion" class="control-label">Número de Cédula</label>
+                <input asp-for="IdPersonaNavigation.NumeroIdentificacion" class="form-control" />
+                <span asp-validation-for="IdPersonaNavigation.NumeroIdentificacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPersonaNavigation.PrimerNombre" class="control-label">Primer Nombre</label>
+                <input asp-for="IdPersonaNavigation.PrimerNombre" class="form-control" />
+                <span asp-validation-for="IdPersonaNavigation.PrimerNombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPersonaNavigation.SegundoNombre" class="control-label">Segundo Nombre</label>
+                <input asp-for="IdPersonaNavigation.SegundoNombre" class="form-control" />
+                <span asp-validation-for="IdPersonaNavigation.SegundoNombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPersonaNavigation.PrimerApellido" class="control-label">Primer Apellido</label>
+                <input asp-for="IdPersonaNavigation.PrimerApellido" class="form-control" />
+                <span asp-validation-for="IdPersonaNavigation.PrimerApellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPersonaNavigation.SegundoApellido" class="control-label">Segundo Apellido</label>
+                <input asp-for="IdPersonaNavigation.SegundoApellido" class="form-control" />
+                <span asp-validation-for="IdPersonaNavigation.SegundoApellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPersonaNavigation.IdMetodoPago" class="form-label">Método de Pago</label>
+                <select asp-for="IdPersonaNavigation.IdMetodoPago" class="form-select" id="listaMetodos"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contrasena" class="control-label">Contraseña</label>
+                <input asp-for="Contrasena" class="form-control" />
+                <span asp-validation-for="Contrasena" class="text-danger"></span>
+            </div>
+            <!--<div class="form-group">
+                <label asp-for="Estado" class="control-label"></label>
+                <input asp-for="Estado" class="form-control" />
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>-->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function() {
+            obtenerMetodos()
+        })
+
+        function obtenerMetodos() {
+            $.ajax({
+                url: "@Url.Action("obtenerMetodosPago","Usuarios")",
+                type: "GET",
+                dataType: "json",
+                data: {},
+                success: function (response) {
+                    console.log(response)
+
+                    $("#listaMetodos").append(
+                        $("<option>").attr({"value":""}).text("Seleccionar")
+                    )
+
+                    $.each(response,function(i, elemento) {
+                        $("#listaMetodos").append(
+                            $("<option>").attr({ "value": "elemento.idMetodoPago" }).text(elemento.descripcion)
+                        )
+                    })
+                }
+            })
+        }
+    </script>
+}
