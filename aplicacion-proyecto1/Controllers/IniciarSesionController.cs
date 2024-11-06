@@ -75,7 +75,7 @@ namespace aplicacion_proyecto1.Controllers
 
             TempData["Usuario"] = idUsuario.First();
 
-            return RedirectToAction("Privacy", "Home");
+            return RedirectToAction("Inicio", "PaginaPrincipal");
         }
 
     }

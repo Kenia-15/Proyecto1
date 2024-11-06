@@ -81,7 +81,9 @@ namespace aplicacion_proyecto1.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdMetodoPago"] = new SelectList(_context.TblMetodosPagos, "IdMetodoPago", "IdMetodoPago", tblPersona.IdMetodoPago);
+            ViewData["MetodosPago"] = new SelectList(_context.TblMetodosPagos, "IdMetodoPago", "Descripcion", tblPersona.IdMetodoPago);
+
+            @TempData["Usuario"] = tblPersona.IdPersona;
             return View(tblPersona);
         }
 
@@ -113,9 +115,11 @@ namespace aplicacion_proyecto1.Controllers
                         throw;
                     }
                 }
-                //return RedirectToAction(nameof(Index));
-            
-            ViewData["Descripcion"] = new SelectList(_context.TblMetodosPagos, "IdMetodoPago", "Descripcion", tblPersona.IdMetodoPago);
+            //return RedirectToAction(nameof(Index));
+            ViewData["MetodosPago"] = new SelectList(_context.TblMetodosPagos, "IdMetodoPago", "Descripcion", tblPersona.IdMetodoPago);
+
+            @TempData["Usuario"] = tblPersona.IdPersona;
+
             return View(tblPersona);
         }
 

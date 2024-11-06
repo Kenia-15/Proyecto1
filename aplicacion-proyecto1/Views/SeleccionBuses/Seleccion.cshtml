@@ -1,0 +1,50 @@
+﻿@model MdlSeleccionBus
+
+<input value="@TempData["Usuario"]" />
+
+<div class="row">
+    <div>
+        <form asp-action="Seleccion">
+            <div class="form-group">
+                <label asp-for="rutas.IdLugarOrigen" class="control-label">Lugar de Origen</label>
+                <select asp-for="rutas.IdLugarOrigen" class="form-select" asp-items="ViewBag.LugarOrigen"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="rutas.IdLugarDestino" class="control-label">Lugar de Destino</label>
+                <select asp-for="rutas.IdLugarDestino" class="form-select" asp-items="ViewBag.LugarDestino"></select>
+            </div>                      
+            <div class="form-group">
+                <input type="submit" value="Buscar Horarios" class="btn btn-primary" asp-controller="SeleccionBuses" asp-route-id="@TempData["Usuario"]" />
+            </div>               
+        </form>  
+            @if (ViewData["ValHorario"] == "S")
+            {
+                <form asp-action="Reserva" asp-controller="SeleccionBuses">
+                    <div class="form-group">
+                        <label asp-for="horarioBus.IdHorario" class="control-label">Seleccione la hora de salida</label>
+                        <select id="listaHorario" asp-for="horarioBus.IdHorario" class="form-select" asp-items="ViewBag.Horario"></select>
+                    </div>
+                    <div>
+                        <label asp-for="fecha" class="control-label">Seleccione el día que desea viajar</label>
+                        <input asp-for="fecha" type="date" class="form-control" value="@ViewData["Fecha"]" />
+                    </div>
+
+                    <input type="hidden" asp-for="rutas.IdLugarOrigen" value="@ViewData["idLugarOrigen"]" />
+                    <input type="hidden" asp-for="rutas.IdLugarDestino" value="@ViewData["idLugarDestino"]" />
+                    <input type="hidden" asp-for="fecha" value="@ViewData["Fecha"]" />
+                    
+                    <div class="form-group">
+                        <input type="submit" value="Reservar" class="btn btn-primary" />
+                    </div>
+                </form>
+            }
+            else if (ViewData["ValHorario"] == "N")
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    @TempData["Mensaje"]
+                </div>
+            }
+
+        <!--<a asp-action="Reserva" asp-controller="SeleccionBuses" asp-route-id="@TempData["Usuario"]">Prueba</a>-->
+    </div>
+</div>

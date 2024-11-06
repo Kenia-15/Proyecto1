@@ -144,6 +144,7 @@ namespace aplicacion_proyecto1.Controllers
 
             if (!validarUsuario(usuario))
             {
+                ViewData["MetodosPago"] = new SelectList(_context.TblMetodosPagos, "IdMetodoPago", "Descripcion");
                 TempData["Mensaje"] = "Debe completar el usuario y la contraseña"; 
             }
             else
