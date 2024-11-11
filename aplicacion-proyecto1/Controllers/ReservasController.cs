@@ -12,6 +12,7 @@ using Microsoft.Data.SqlClient;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using NuGet.Protocol;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Globalization;
 
 namespace aplicacion_proyecto1.Controllers
 {
@@ -52,12 +53,11 @@ namespace aplicacion_proyecto1.Controllers
 
             return View(tblReserva);
         }
-
       
 
         // GET: Reservas/Create
         //
-        public IActionResult Create(string id, string idH, string valH, string valF)
+        public IActionResult Create(string id, string idH, string valH, DateTime valF)
         {
             ViewData["IdHorario"] = new SelectList(_context.TblHorarios, "IdHorario", "IdHorario");
             ViewData["IdUsuario"] = new SelectList(_context.TblUsuarios, "IdUsuario", "IdUsuario");
@@ -65,12 +65,9 @@ namespace aplicacion_proyecto1.Controllers
             TblRuta ruta = new TblRuta();
             TblHorario horario = new TblHorario();
             TblReserva reservas = new TblReserva();
-            List<string> asientos = new List<string>();
-            List<string> Tablero = new List<string>();
-            TblHorariosXBuse hBus = new TblHorariosXBuse();            
+            decimal asientos = 0;        
             decimal cantidadAsientos = 0;
-            string[] listaNueva = new string[28];
-            string fecha = DateTime.Parse(valF).ToString("dd/MM/yyyy");
+            string fecha = valF.ToString("dd/MM/yyyy");
             int count = 0;
 
             //Se obtiene el horario
@@ -79,63 +76,22 @@ namespace aplicacion_proyecto1.Controllers
             //Se obtiene la ruta
             ruta = _context.TblRutas.FirstOrDefault(p => p.IdRuta == horario.IdRuta);
 
-            //Se obtienen los asientos por reserva
-            try
-            {
-                var queryAsientos = "select t.id_asiento from p_buses.dbo.tbl_asientos_x_reserva t, p_buses.dbo.tbl_reservas r where t.id_reserva = r.id_reserva and r.fecha = '" + fecha + "' and r.hora = '" + valH + "';";
-
-
-                using (SqlConnection sqlConn = new SqlConnection(Configuration["ConnectionStrings:conexion"]))
-                {
-                    using (SqlCommand com = new SqlCommand(queryAsientos, sqlConn))
-                    {
-                        sqlConn.Open();
-
-                        using (SqlDataReader read = com.ExecuteReader())
-                        {
-                            while (read.Read())
-                            {
-                                asientos.Add(read.GetValue(0).ToString());
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                asientos = null;
-                TempData["Mensaje"] = ex;
-            }
+            //Se obtienen los asientos ocupados por reserva para la fecha y hora indicadas
+            reservas = _context.TblReservas.FirstOrDefault(p => p.Hora == valH && p.Fecha.Equals(fecha));            
 
             //Se obtiene la cantidad de asientos para la ruta con fecha y hora que ya están reservados
-            cantidadAsientos = 28 - asientos.Count();
-
-            //Se llena el tablero de asientos con el número de asiento secuencial del 1 al 28 (cada bus cuenta con 28 asientos)
-            /*for (int i = 0; i < listaNueva.Count(); i++)
+            if (reservas == null)
             {
-                count = count + 1;
-                listaNueva[i] = count.ToString();
-                Tablero.Add(listaNueva[i]);
-            }                       
-
-            //Se busca cuáles asientos están ocupados para proceder a eliminarlos
-            for (int i = 0; i < listaNueva.Count(); i++)
+                cantidadAsientos = 28 - 0;
+            } else
             {
-                for (int j = 0; j < asientos.Count(); j++)
-                    {
-                        if (listaNueva[i] == asientos[j])
-                        {
-                            Tablero.Remove(listaNueva[i]);
-                        }
-                    }
-             }
-            //Se pasa la lista de asientos a la vista
-            ViewBag.Lista = Tablero;*/
+                cantidadAsientos = 28 - reservas.NumeroAsientos;
+            }
 
             ViewData["Asientos"] = cantidadAsientos;
             TempData["Usuario"] = id;
             ViewData["Horario"] = idH;
-            ViewData["Fecha"] = fecha;
+            ViewData["Fecha"] = valF;
             ViewData["Hora"] = valH;
             ViewData["Precio"] = ruta.Precio;
 
@@ -149,17 +105,13 @@ namespace aplicacion_proyecto1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdReserva,IdHorario,IdUsuario,EstadoPago,Fecha,Hora,NumeroAsientos")] TblReserva tblReserva, string id, string fecha, string hora, decimal asientos, string hor)
         {
-            //, IFormCollection asiento
-            //Se obtiene el número o números de asiento a reservar            
-            //lista = asiento["asiento"];
-            //lista = "4,5,6";
             decimal lista = tblReserva.NumeroAsientos;
-            //string[] ListaAsientos = lista.Split(',');
-            decimal cantAsientosOcupados = 0;
-            List<String> asientosOcupados = new List<String>();
+            decimal asientosOcupados = 0;
             decimal asientosQuedan = 0;
 
             //--
+            TblLugare lugarOrigen = new TblLugare();
+            TblLugare lugarDestino = new TblLugare();
             TblHistorialPago historial = new TblHistorialPago();
             TblAsientosXReserva asientosXreserva = new TblAsientosXReserva();
             TblHorario horario = new TblHorario();
@@ -171,7 +123,7 @@ namespace aplicacion_proyecto1.Controllers
             var countReserva = _context.TblReservas.Count();
             var countHistorial = _context.TblHistorialPagos.Count();            
             var query = "";
-            string fec = tblReserva.Fecha.ToString("dd/MM/yyyy");
+            string fec = fecha;
 
             try
             {
@@ -197,47 +149,20 @@ namespace aplicacion_proyecto1.Controllers
                     secuenciaIdH += 1;
                 }
 
-
-                //Se obtienen los asientos por reserva
-                try
-                {
-                    var queryAsientos = "select t.id_asiento from p_buses.dbo.tbl_asientos_x_reserva t, p_buses.dbo.tbl_reservas r where t.id_reserva = r.id_reserva and r.fecha = '" + fec + "' and r.hora = '" + tblReserva.Hora + "';";
-
-
-                    using (SqlConnection sqlConn = new SqlConnection(Configuration["ConnectionStrings:conexion"]))
-                    {
-                        using (SqlCommand com = new SqlCommand(queryAsientos, sqlConn))
-                        {
-                            sqlConn.Open();
-
-                            using (SqlDataReader read = com.ExecuteReader())
-                            {
-                                while (read.Read())
-                                {
-                                    asientosOcupados.Add(read.GetValue(0).ToString());
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    asientosOcupados = null;
-                    TempData["Mensaje"] = ex;
-                }
-
                 //Se recopila la información necesaria para realizar la reserva 
                 decimal cantAsientos = lista;
                 horario = _context.TblHorarios.FirstOrDefault(p => p.IdHorario == hor);
                 ruta = _context.TblRutas.FirstOrDefault(p => p.IdRuta == horario.IdRuta);
+                lugarOrigen = _context.TblLugares.FirstOrDefault(p => p.IdLugar == ruta.IdLugarOrigen);
+                lugarDestino = _context.TblLugares.FirstOrDefault(p => p.IdLugar == ruta.IdLugarDestino);
 
-                //Se obtiene la cantidad de asientos para la ruta con fecha y hora que ya están reservados
-                cantAsientosOcupados = 28 - asientosOcupados.Count();
+                //Se obtienen los asientos ocupados por reserva para la fecha y hora indicadas
+                asientosOcupados = asientos;
                                
                 //Se actualiza la cantidad de asientos disponibles
                 try
                 {
-                    asientosQuedan = cantAsientosOcupados - cantAsientos;
+                    asientosQuedan = asientosOcupados - cantAsientos;
                     var queryUpdate = "update p_buses.dbo.tbl_horarios_x_buses set asientos_disponibles = '"+ asientosQuedan + "' where id_horario = '"+ horario.IdHorario+ "';";
                         using (SqlConnection sqlConn = new SqlConnection(Configuration["ConnectionStrings:conexion"]))
                         {
@@ -254,29 +179,40 @@ namespace aplicacion_proyecto1.Controllers
                     TempData["Mensaje"] = "Ocurrió un error al intentar realizar la reserva" + ex.ToString();
                 }
 
+                string idR = secuenciaIdRs.ToString();
+                string formatoFecha = DateTime.Parse(fecha).ToString("dd/MM/yyyy");
+                DateTime fechaDate = Convert.ToDateTime(fecha);
+                decimal monto = ruta.Precio* cantAsientos;
+
                 //Se realiza la inserción de la reserva en la tabla tbl_reservas 
                 tblReserva.IdReserva = secuenciaIdRs.ToString();
                 tblReserva.IdHorario = hor;
-                tblReserva.Fecha = tblReserva.Fecha;
+                tblReserva.Fecha = fechaDate;
                 tblReserva.Hora = tblReserva.Hora;
                 tblReserva.EstadoPago = "C";
                 tblReserva.NumeroAsientos = cantAsientos;
                 tblReserva.IdUsuario = id;
                 _context.Add(tblReserva);
 
-
                 //Se inserta la reserva en el historial
                 historial.IdHistorial = secuenciaIdH.ToString();
                 historial.IdReserva = secuenciaIdRs.ToString();
                 historial.Monto = ruta.Precio * cantAsientos;
-                historial.FechaPago = tblReserva.Fecha;
+                historial.FechaPago = fechaDate;
                 _context.Add(historial);
 
                 await _context.SaveChangesAsync();
 
-                ViewData["IdHorario"] = new SelectList(_context.TblHorarios, "IdHorario", "IdHorario", tblReserva.IdHorario);
-                ViewData["IdUsuario"] = new SelectList(_context.TblUsuarios, "IdUsuario", "IdUsuario", tblReserva.IdUsuario);
-                return RedirectToAction("Index", "Factura");                
+                TempData["IdReserva"] = idR;
+                TempData["IdUsuario"] = id;
+                TempData["FechaR"] = fechaDate.ToString("dd/MM/yyyy");
+                TempData["lOrigen"] = lugarOrigen.Descripcion;
+                TempData["lDestino"] = lugarDestino.Descripcion;
+                TempData["horaR"] = hora;
+                TempData["montoR"] = monto.ToString();
+                TempData["cantidad"] = cantAsientos.ToString();
+
+                return RedirectToAction("Index", "Factura", new { idReserva = idR, fecha = fechaDate.ToString("dd/MM/yyyy"), lorigen = lugarOrigen.Descripcion, ldestino = lugarDestino.Descripcion, horaR = hora, total = monto.ToString(), cantA = cantAsientos.ToString() });             
 
             }
             catch(Exception e)

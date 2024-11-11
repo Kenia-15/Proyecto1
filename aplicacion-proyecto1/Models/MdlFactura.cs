@@ -5,7 +5,10 @@
         public TblHorario? horario { get; set; }
         public TblRuta? ruta { get; set; }
         public TblPersona? persona { get; set; }
-        public TblHorariosXBuse horarioBus { get; set; }
-        public TblHistorialPago historial { get; set; }
+        public TblReserva? reserva { get; set; }    
+        public TblHorariosXBuse horarioBus { get; set; } = null!;
+        /// <summary>
+        public TblHistorialPago historial { get; set; } = null!;
+        /// <summary>
     }
 }

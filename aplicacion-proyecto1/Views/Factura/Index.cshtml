@@ -1,7 +1,45 @@
-﻿
+﻿@model aplicacion_proyecto1.Models.MdlFactura
+
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Recibo de pago</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div class="form-group">
+                <label asp-for="ruta.IdLugarOrigen" class="control-label">Lugar de Origen:</label>
+                <p disabled asp-for="ruta.IdLugarOrigen">@ViewData["idLugarOrigen"]</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="ruta.IdLugarDestino" class="control-label">Lugar de Destino:</label>
+                <p disabled asp-for="ruta.IdLugarDestino">@ViewData["idLugarDestino"]</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="reserva.Fecha" class="control-label">Fecha:</label>
+                <p disabled asp-for="reserva.Fecha">@ViewData["Fecha"]</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="reserva.Hora" class="control-label">Hora:</label>
+                <p disabled asp-for="reserva.Hora">@ViewData["Hora"]</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="reserva.NumeroAsientos" class="control-label">Cantidad de Asientos:</label>
+                <p disabled asp-for="reserva.NumeroAsientos">@ViewData["NumeroAsientos"]</p>
+            </div>            
+            <br />
+            <hr />
+            <div class="form-group">
+                <label asp-for="historial.Monto" class="control-label">Total reserva:</label>
+                <p disabled asp-for="historial.Monto">@ViewData["Monto"]</p>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="Inicio" asp-controller="PaginaPrincipal">Volver al inicio</a>
+</div>
 

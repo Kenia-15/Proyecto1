@@ -3,7 +3,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<input value="@TempData["Usuario"]" />
+<input type="hidden" value="@TempData["Usuario"]" />
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container-fluid">
@@ -20,7 +20,7 @@
                     <a class="nav-link text-dark" asp-controller="SeleccionBuses" asp-action="Seleccion" asp-route-id="@TempData["Usuario"]">Reservar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="" asp-route-id="@TempData["Usuario"]">Historial de compras</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Reservas" asp-action="Details" asp-route-id="@TempData["Usuario"]">Historial de compras</a>
                 </li>
             </ul>
         </div>
