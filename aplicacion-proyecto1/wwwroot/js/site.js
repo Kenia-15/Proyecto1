@@ -3,3 +3,9 @@
         $(this).remove();
     });
 }, 3000);
+
+
+/*
+if (history.forward(1))
+    location.replace(history.forward(1));
+*/

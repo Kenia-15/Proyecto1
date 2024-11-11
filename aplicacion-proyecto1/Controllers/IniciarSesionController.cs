@@ -24,6 +24,7 @@ namespace aplicacion_proyecto1.Controllers
 
         public IActionResult IniciarSesion()
         {
+            //TempData["Usuario"] = null;
             return View();
         }
 
@@ -33,12 +34,14 @@ namespace aplicacion_proyecto1.Controllers
         {
             var validaUsuario = 0;
             var query = "";
+            //TempData["Usuario"] = null;
 
             if (usuario.email == null || usuario.contrasena == null)
             {
                 TempData["Mensaje"] = "Debe ingresar el usuario y la contraseña";
             } 
             else {
+                //Se consulta si existe un usuario con las credenciales suministradas
                 try
                 {
                     query = "Select 1 from p_buses.dbo.tbl_usuarios t where t.email = '" + usuario.email + "' and t.contrasena = '" + usuario.contrasena + "';";
@@ -68,14 +71,28 @@ namespace aplicacion_proyecto1.Controllers
             if (validaUsuario == 0 && (usuario.email != null || usuario.contrasena != null))
             {
                 TempData["Mensaje"] = "El usuario o la contraseña son incorrectos";
+            } 
+            else if (usuario.email == null || usuario.contrasena == null)
+            {
+                TempData["Mensaje"] = "Debe ingresar un usuario y contraseña";
             }
+            else
+            {
+                //Se obtiene el identificador del usuario para pasarlo al controlador PaginaPrincipalController
+                var idUsuario = (from i in _context.TblUsuarios where i.Email == usuario.email && i.Contrasena == usuario.contrasena select i.IdUsuario);
+                
+                TempData["Usuario"] = idUsuario.FirstOrDefault();
+            }
+            
 
-
-            var idUsuario = (from i in _context.TblUsuarios where i.Email == usuario.email && i.Contrasena == usuario.contrasena select i.IdUsuario);
-
-            TempData["Usuario"] = idUsuario.First();
-
-            return RedirectToAction("Inicio", "PaginaPrincipal");
+            if (TempData["Usuario"] == null)
+            {
+                TempData["Mensaje"] = "Debe ingresar un usuario y contraseña";
+                return View();
+            } else
+            {
+                return RedirectToAction("Inicio", "PaginaPrincipal");
+            }            
         }
 
     }

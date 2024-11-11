@@ -2,6 +2,13 @@
 
 <input value="@TempData["Usuario"]" />
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+    </div>
+}
+
 <div class="row">
     <div>
         <form asp-action="Seleccion">
@@ -12,31 +19,68 @@
             <div class="form-group">
                 <label asp-for="rutas.IdLugarDestino" class="control-label">Lugar de Destino</label>
                 <select asp-for="rutas.IdLugarDestino" class="form-select" asp-items="ViewBag.LugarDestino"></select>
-            </div>                      
+            </div> 
+            <div>
+                <label asp-for="Fecha" class="control-label">Seleccione el día que desea viajar</label>
+                <input asp-for="Fecha" type="date" class="form-control" value="@ViewData["Fecha"]" />
+            </div>
+            
             <div class="form-group">
-                <input type="submit" value="Buscar Horarios" class="btn btn-primary" asp-controller="SeleccionBuses" asp-route-id="@TempData["Usuario"]" />
-            </div>               
-        </form>  
+                <input type="submit" value="Buscar Horarios" class="btn btn-primary" asp-action="Seleccion" asp-controller="SeleccionBuses" asp-route-id="@TempData["Usuario"]" />
+            </div>
+        </form>
             @if (ViewData["ValHorario"] == "S")
-            {
-                <form asp-action="Reserva" asp-controller="SeleccionBuses">
-                    <div class="form-group">
-                        <label asp-for="horarioBus.IdHorario" class="control-label">Seleccione la hora de salida</label>
-                        <select id="listaHorario" asp-for="horarioBus.IdHorario" class="form-select" asp-items="ViewBag.Horario"></select>
-                    </div>
+            {            
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Horarios
+                        </th>
+                        <th class="text-center">
+                            Acción
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Lista)
+                    {
+                        <tr>
+                            <td>
+                                @item.Hora
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Create" asp-controller="Reservas" asp-route-id="@TempData["Usuario"]" asp-route-idH="@item.IdHorario" asp-route-valH="@item.Hora" asp-route-valF="@ViewData["Fecha"]">Reservar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+                /*
+                <form>                   
                     <div>
                         <label asp-for="fecha" class="control-label">Seleccione el día que desea viajar</label>
                         <input asp-for="fecha" type="date" class="form-control" value="@ViewData["Fecha"]" />
                     </div>
+                    <div class="form-group">
+                        <label asp-for="horarioBus.IdHorario" class="control-label">Seleccione la hora de salida</label>
+                        <select id="listaHorario" asp-for="horarioBus.IdHorario" class="form-select" asp-items="ViewBag.Horario">
+                            <option disabled selected>Seleccione la hora de salida</option>
+                        </select>
+                    </div>
 
                     <input type="hidden" asp-for="rutas.IdLugarOrigen" value="@ViewData["idLugarOrigen"]" />
                     <input type="hidden" asp-for="rutas.IdLugarDestino" value="@ViewData["idLugarDestino"]" />
-                    <input type="hidden" asp-for="fecha" value="@ViewData["Fecha"]" />
-                    
-                    <div class="form-group">
-                        <input type="submit" value="Reservar" class="btn btn-primary" />
-                    </div>
+
+                <input value="@TempData["Usuario"]" />
+
+                <a asp-action="Create" asp-controller="Reservas" asp-route-id="@TempData["Usuario"]" asp-route-idH="ViewBag.Horario" asp-route-valF="@ViewData["Fecha"]" asp-route-valH="@ViewData["Hora"]">Reservar</a>
+                    <!--<div class="form-group">
+                    <input type="submit" value="Reservar" class="btn btn-primary" asp-controller="Reservas" asp-action="Create" asp-route-id="@TempData["Usuario"]" />
+                    </div>-->
                 </form>
+                */
             }
             else if (ViewData["ValHorario"] == "N")
             {
@@ -44,7 +88,9 @@
                     @TempData["Mensaje"]
                 </div>
             }
-
-        <!--<a asp-action="Reserva" asp-controller="SeleccionBuses" asp-route-id="@TempData["Usuario"]">Prueba</a>-->
     </div>
+</div>
+
+<div>
+    <a asp-controller="PaginaPrincipal" asp-action="Inicio">Regresar</a>
 </div>

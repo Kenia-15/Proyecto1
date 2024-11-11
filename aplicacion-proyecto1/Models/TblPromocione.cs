@@ -7,7 +7,6 @@ namespace aplicacion_proyecto1.Models
     {
         public TblPromocione()
         {
-            TblHistorialPagos = new HashSet<TblHistorialPago>();
             IdRuta = new HashSet<TblRuta>();
         }
 
@@ -31,8 +30,6 @@ namespace aplicacion_proyecto1.Models
         /// Fecha final de la promocion
         /// </summary>
         public DateTime FechaFinal { get; set; }
-
-        public virtual ICollection<TblHistorialPago> TblHistorialPagos { get; set; }
 
         public virtual ICollection<TblRuta> IdRuta { get; set; }
     }

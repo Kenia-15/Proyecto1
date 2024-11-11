@@ -3,20 +3,22 @@
 <input  value="@TempData["Usuario"]" />
 <!--type="hidden"-->
 
-<form asp-action="Asientos">
+<form asp-action="Reserva">
     <div class="form-group">
         <label asp-for="horarioBus.AsientosDisponibles" class="control-label">Asientos disponibles</label>
         <p>@ViewData["Asientos"]</p>
     </div>
 
     <div class="form-group">
-        <label asp-for="cantidadPersonas" class="control-label">Cantidad de personas</label>
+        <label asp-for="cantidadPersonas" class="control-label">Cantidad de asientos</label>
         <input type="text" asp-for="cantidadPersonas" class="form-control" />
     </div>
 
     <div class="form-group">
         <input type="submit" value="Elegir Asientos" class="btn btn-primary" />
     </div>
-
-
 </form>
+
+<div>
+    <a asp-controller="PaginaPrincipal" asp-action="Inicio">Regresar</a>
+</div>

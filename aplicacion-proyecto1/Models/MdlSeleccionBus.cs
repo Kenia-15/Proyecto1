@@ -12,6 +12,6 @@
 
         public int cantidadPersonas { get; set; }
 
-        public DateTime fecha { get; set; } 
+        public string Fecha { get; set; } 
     }
 }

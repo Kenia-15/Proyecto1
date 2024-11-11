@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace aplicacion_proyecto1.Controllers
@@ -21,7 +23,7 @@ namespace aplicacion_proyecto1.Controllers
         }
 
         public IActionResult Index()
-        {            
+        {
             return View();
         }
 
@@ -33,15 +35,22 @@ namespace aplicacion_proyecto1.Controllers
             TempData["Usuario"] = id;
             return View();
         }
-
+        
+        /*Procedimiento encargado de obtener la informaciión de la vista Selección para enviarla al controlador ReservasController
+         el cual se encargará de realizar la lógica de la reserva*/
         [HttpPost]
-        public IActionResult Seleccion(MdlSeleccionBus seleccion)
+        public IActionResult Seleccion(MdlSeleccionBus seleccion, string id, string hora, string fecha)
         {
-            var lorigen = seleccion.rutas.IdLugarOrigen.ToString();
-            var ldestino = seleccion.rutas.IdLugarDestino.ToString();
             var ruta = "";
             var query = "";
+            var lorigen = seleccion.rutas.IdLugarOrigen.ToString();
+            var ldestino = seleccion.rutas.IdLugarDestino.ToString();
+            TblHorariosXBuse horarioBus = new TblHorariosXBuse();
+            TblReserva reserva = new TblReserva();
 
+            TempData["Usuario"] = id;
+
+            //Se obtiene la ruta según el lugar de origen y destino seleccionados
             try
             {
                 query = "Select t.id_ruta from p_buses.dbo.tbl_rutas t where t.id_lugar_origen = '" + lorigen + "' and t.id_lugar_destino = '" + ldestino + "';";
@@ -68,63 +77,31 @@ namespace aplicacion_proyecto1.Controllers
                 TempData["Mensaje"] = ex;
             }
 
-
+            //Se obtiene los horarios disponibles para la ruta seleccionada
             var horario = _context.TblHorarios.Where(x => x.IdRuta == ruta).OrderBy(x => x.Hora).Select(x => new { IdHorario = x.IdHorario, Hora = x.Hora }).ToList();
 
             if (horario == null || horario.Count == 0)
             {
                 ViewData["ValHorario"] = "N";
                 TempData["Mensaje"] = "No hay horarios para esa ruta";
-            } else
+            }
+            else
             {
+                //Si se encontró un horario, se muestra en la vista
                 ViewData["ValHorario"] = "S";
-                ViewData["Horario"] = new SelectList(horario, "IdHorario", "Hora");
+                ViewBag.Lista = horario;
+                ViewData["Fecha"] = fecha;
             }
 
             ViewData["LugarOrigen"] = new SelectList(_context.TblLugares, "IdLugar", "Descripcion");
             ViewData["LugarDestino"] = new SelectList(_context.TblLugares, "IdLugar", "Descripcion");
-            ViewData["Fecha"] = seleccion.fecha.ToString("dd/MM/yyyy");
 
-            ViewData["idLugarOrigen"] = lorigen;
-            ViewData["idLugarDestino"] = ldestino;
-
-            return View();
-        }
-
-        public IActionResult Reserva(string id)
-        {
-            ViewData["LugarOrigen"] = new SelectList(_context.TblLugares, "IdLugar", "Descripcion");
-            ViewData["LugarDestino"] = new SelectList(_context.TblLugares, "IdLugar", "Descripcion");
-
-            TempData["Usuario"] = id;
+            ViewData["Fecha"] = fecha;
+            ViewData["Hora"] = hora;
+            TempData["idLugarOrigen"] = lorigen;
+            TempData["idLugarDestino"] = ldestino;            
 
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult Reserva(MdlSeleccionBus seleccion)
-        {
-            string idHorario = seleccion.horarioBus.IdHorario;
-            string idLugarOrigen = seleccion.rutas.IdLugarOrigen;
-            string idLugarDestino = seleccion.rutas.IdLugarDestino;
-            string fecha = seleccion.fecha.ToString("dd/MM/yyyy");
-            int cantAsientos = seleccion.cantidadPersonas;
-
-            TblHorariosXBuse horarioBus = new TblHorariosXBuse();
-
-            horarioBus = _context.TblHorariosXBuses.FirstOrDefault(t => t.IdHorario == idHorario);
-
-            ViewData["Asientos"] = horarioBus.AsientosDisponibles;
-
-            //lógica para poder ver si hay asientos disponibles para la fecha y hora seleccionadas, si no hay
-            //mostrar mensaje, si hay mostrar vista para continuar con la reserva
-
-            //ver como enviar los datos para las diferentes vistas
-
-            //ver como pasar el id de la persona en las diferentes vistas
-
-
-           return View();
         }
     }
 }

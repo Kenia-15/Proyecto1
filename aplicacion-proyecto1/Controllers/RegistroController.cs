@@ -40,10 +40,12 @@ namespace aplicacion_proyecto1.Controllers
             idPersona = insertarPersona(registro);
             valido = insertarUsuario(registro, idPersona);
 
+            //Si se insertó correctamente el usuario se redirecciona a la página de inicio de sesión
             if (valido == true)
             {
                 return RedirectToAction("IniciarSesion", "IniciarSesion");
             }
+            //de lo contrario se mantiene en la misma vista
             else
             {
                 return View();
@@ -51,18 +53,20 @@ namespace aplicacion_proyecto1.Controllers
         }
 
         public String insertarPersona(MdlRegistro persona)
-        {            
-            var secuenciaIdPer = 0;            
+        {               
+            var secuenciaIdPer = 0;  
+            //Se consulta si la tabla personas contiene datos
             var countPer = _context.TblPersonas.Count();
             var query = "";
             
-            //Se realiza el autoincrementado de la persona
+            //Se realiza el autoincrementado dei id de la persona
             if (countPer == 0)
             {
                 secuenciaIdPer = 1;
             }
             else
             {
+                //Se obtiene el último índice de la tabla
                 secuenciaIdPer = _context.TblPersonas.Max(p => Convert.ToInt32(p.IdPersona));
                 secuenciaIdPer += 1;
             }
@@ -73,6 +77,7 @@ namespace aplicacion_proyecto1.Controllers
             }
             else
             {
+                //Se inserta a la persona en la tabla tbl_personas
                 try
                 {
                     query = "insert into p_buses.dbo.tbl_personas(id_persona, id_metodo_pago, numero_identificacion, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido) values('" + secuenciaIdPer + "', '" + persona.personas.IdMetodoPago + "', '" + persona.personas.NumeroIdentificacion + "', '" + persona.personas.PrimerNombre + "', '" + persona.personas.SegundoNombre + "', '" + persona.personas.PrimerApellido + "', '" + persona.personas.SegundoApellido + "');";
@@ -96,6 +101,7 @@ namespace aplicacion_proyecto1.Controllers
             return secuenciaIdPer.ToString();  
         }
 
+        /*Función que devuelve un boleano para validar que los datos de la persona no vayan vacíos*/
         public bool validarPersona(MdlRegistro persona)
         {
             if (persona.personas.NumeroIdentificacion == null || persona.personas.PrimerNombre == null || persona.personas.PrimerApellido == null || persona.personas.SegundoApellido == null)
@@ -107,6 +113,7 @@ namespace aplicacion_proyecto1.Controllers
             }           
         }
 
+        /*Función que devuelve un booleano para validar que las credenciales del usuario no vayan vacías*/
         public bool validarUsuario(MdlRegistro usuario)
         {
             if (usuario.usuarios.Email == null || usuario.usuarios.Contrasena == null)
@@ -118,6 +125,7 @@ namespace aplicacion_proyecto1.Controllers
             }
         }
 
+        /*Función encargada de insertar las credenciales del usuario en la tabla tbl_usuarios*/
         public bool insertarUsuario(MdlRegistro usuario, String IdPersona)
         {
             var identificadorPersona = "";
@@ -126,6 +134,7 @@ namespace aplicacion_proyecto1.Controllers
             var query = "";
             var correo = 0;
 
+            //Se consulta si la tabla see encuentra vacía
             var countUser = _context.TblUsuarios.Count();
 
             //Se realiza el autoincrementado del usuario
@@ -149,6 +158,7 @@ namespace aplicacion_proyecto1.Controllers
             }
             else
             {
+                //Se inserta el registro de las credenciales de la persona en la tabla tbl_usuarios
                 try
                     {
                         query = "insert into p_buses.dbo.tbl_usuarios(id_usuario, id_persona, email, contrasena, estado) values('" + secuenciaIdUser + "', '" + identificadorPersona + "', '" + usuario.usuarios.Email + "', '" + usuario.usuarios.Contrasena + "', 'A');";
@@ -171,6 +181,7 @@ namespace aplicacion_proyecto1.Controllers
                         flag = false;
                     }                
             }
+            //bandera para determar si se insertó correctamente el usuario
             return flag;
         }
     }

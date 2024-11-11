@@ -16,6 +16,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\MIS-DATOS\CARRERA\UNED\III-CUATRI-2024\Proyecto 1\aplicacion-proyecto1\aplicacion-proyecto1
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Factura/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmFjdHVyYVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -74,6 +78,26 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Registro/Registrar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVnaXN0cm9cUmVnaXN0cmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Reservas/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Reservas/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Reservas/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Reservas/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/Reservas/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/MIS-DATOS/CARRERA/UNED/III-CUATRI-2024/Proyecto 1/aplicacion-proyecto1/aplicacion-proyecto1/Views/SeleccionBuses/Reserva.cshtml]

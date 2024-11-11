@@ -9,7 +9,7 @@ namespace aplicacion_proyecto1.Models
         {
             TblAsientosXReservas = new HashSet<TblAsientosXReserva>();
             TblHistorialPagos = new HashSet<TblHistorialPago>();
-        }
+    }
 
         /// <summary>
         /// Identificador de la tabla
@@ -34,11 +34,14 @@ namespace aplicacion_proyecto1.Models
         /// <summary>
         /// Hora de la reserva
         /// </summary>
-        public TimeSpan Hora { get; set; }
+        public string Hora { get; set; } = null!;
+
+        public decimal NumeroAsientos { get; set; }
 
         public virtual TblHorario IdHorarioNavigation { get; set; } = null!;
         public virtual TblUsuario IdUsuarioNavigation { get; set; } = null!;
         public virtual ICollection<TblAsientosXReserva> TblAsientosXReservas { get; set; }
         public virtual ICollection<TblHistorialPago> TblHistorialPagos { get; set; }
+
     }
 }

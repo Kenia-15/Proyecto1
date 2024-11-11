@@ -116,21 +116,10 @@ namespace aplicacion_proyecto1.Models
                     .HasColumnName("fecha_pago")
                     .HasComment("Fecha en que se realizo el pago de la compra");
 
-                entity.Property(e => e.IdPromocion)
-                    .HasMaxLength(5)
-                    .IsUnicode(false)
-                    .HasColumnName("id_promocion")
-                    .HasComment("Identificador de la promocion");
-
                 entity.Property(e => e.Monto)
                     .HasColumnType("numeric(14, 2)")
                     .HasColumnName("monto")
                     .HasComment("Monto total de la reserva");
-
-                entity.HasOne(d => d.IdPromocionNavigation)
-                    .WithMany(p => p.TblHistorialPagos)
-                    .HasForeignKey(d => d.IdPromocion)
-                    .HasConstraintName("fk_historial_02");
 
                 entity.HasOne(d => d.IdReservaNavigation)
                     .WithMany(p => p.TblHistorialPagos)
@@ -373,6 +362,10 @@ namespace aplicacion_proyecto1.Models
                 entity.Property(e => e.Hora)
                     .HasColumnName("hora")
                     .HasComment("Hora de la reserva");
+
+                entity.Property(e => e.NumeroAsientos)
+                    .HasColumnName("cantidad_asientos")
+                    .HasComment("Cantidad de asientos");
 
                 entity.Property(e => e.IdHorario)
                     .HasMaxLength(5)

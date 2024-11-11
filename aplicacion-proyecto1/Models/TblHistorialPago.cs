@@ -14,10 +14,6 @@ namespace aplicacion_proyecto1.Models
         /// </summary>
         public string IdReserva { get; set; } = null!;
         /// <summary>
-        /// Identificador de la promocion
-        /// </summary>
-        public string? IdPromocion { get; set; }
-        /// <summary>
         /// Monto total de la reserva
         /// </summary>
         public decimal Monto { get; set; }
@@ -26,7 +22,6 @@ namespace aplicacion_proyecto1.Models
         /// </summary>
         public DateTime FechaPago { get; set; }
 
-        public virtual TblPromocione? IdPromocionNavigation { get; set; }
         public virtual TblReserva IdReservaNavigation { get; set; } = null!;
     }
 }
