@@ -12,11 +12,10 @@
 }
 
 
-<div>
-    <h1 class="display-4">Iniciar Sesión</h1>
-        <div class="col-md-4">
+<div class="container">
+    <h1 class="display-4 text-center" style="margin-top:2em">Iniciar Sesión</h1>
+    <div class="col-md-4" style="margin-left:20em;margin-top:2em">
             <form method="post" class="form-floating">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="email" class="control-label">Email</label>
                     <input asp-for="email" type="email" class="form-control" />
@@ -27,12 +26,12 @@
                 </div>
             <br />
                 <div class="form-group">
-                    <input type="submit" asp-action="IniciarSesion" value="Iniciar Sesión" class="btn btn-primary" />
+                <input type="submit" asp-action="IniciarSesion" value="Iniciar Sesión" class="btn" style="background-color:#f9a492;width: 20em" />
                 </div>
             </form>
             <br />
             <li class="nav-item">
-                ¿No tienes una cuenta? <a asp-area="" asp-controller="Registro" asp-action="">Registrarse</a>
+                ¿No tienes una cuenta? <a asp-area="" asp-controller="Registro" asp-action="Registrar">Registrarse</a>
             </li>
         </div>   
 </div>

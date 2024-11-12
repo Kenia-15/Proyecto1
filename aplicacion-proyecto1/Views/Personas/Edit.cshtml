@@ -4,9 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>TblPersona</h4>
+<h4>Perfil</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -37,13 +35,14 @@
                 <label asp-for="SegundoApellido" class="control-label">Segundo Apellido</label>
                 <input asp-for="SegundoApellido" class="form-control" />
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn" style="background-color:#f9a492" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
     <a asp-controller="PaginaPrincipal" asp-action="Inicio">Regresar</a>
 </div>

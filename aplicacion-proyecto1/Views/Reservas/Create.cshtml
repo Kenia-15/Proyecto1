@@ -10,7 +10,7 @@
         @TempData["Mensaje"]
     </div>
 }
-
+<h4>Reserva</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -51,12 +51,13 @@
           
 
             <div class="form-group">
-                <input type="submit" asp-route-hora="@ViewData["Hora"]" asp-route-fecha="@ViewData["Fecha"]" asp-route-asientos="@ViewData["Asientos"]" asp-route-hor="@ViewData["Horario"]" value="Realizar Reserva" class="btn btn-primary" />
+                <input type="submit" asp-route-hora="@ViewData["Hora"]" asp-route-fecha="@ViewData["Fecha"]" asp-route-asientos="@ViewData["Asientos"]" asp-route-hor="@ViewData["Horario"]" value="Realizar Reserva" class="btn" style="background-color:#f9a492" />
             </div>
         </form>
     </div>
 </div>
 
+<br />
 <div>
     <a asp-action="Inicio" asp-controller="PaginaPrincipal">Volver al inicio</a>
 </div>

@@ -13,9 +13,10 @@ else if (TempData["MensajeExito"] != null)
     </div>
 }
 
-<div class="row">
+<div class="row" style="margin-left:20em;margin-top:2em">
     <div class="col-md-4">
-        <form asp-action="Registrar">            
+        <h1 class="display-4 text-center">Registrarse</h1>
+        <form asp-action="Registrar" >
             <div class="form-group">
                 <label asp-for="personas.NumeroIdentificacion" class="control-label">Número de Cédula</label>
                 *<input type="text" asp-for="personas.NumeroIdentificacion" class="form-control" />
@@ -48,13 +49,14 @@ else if (TempData["MensajeExito"] != null)
                 <label asp-for="usuarios.Contrasena" class="control-label">Contraseña</label>
                 *<input type="password" asp-for="usuarios.Contrasena" class="form-control" />
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Registrarse" class="btn btn-primary" />
+                <input type="submit" value="Registrarse" class="btn" style="background-color:#f9a492;width: 15em" />
             </div>
         </form>
-
+        <br />
         <li class="nav-item">
-            ¿Ya tienes una cuenta? <a asp-area="" asp-controller="Home" asp-action="">Iniciar Sesión</a>             
+            ¿Ya tienes una cuenta? <a asp-area="" asp-controller="IniciarSesion" asp-action="">Iniciar Sesión</a>             
         </li>
     </div>
 </div>
